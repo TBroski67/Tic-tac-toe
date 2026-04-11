@@ -1,15 +1,11 @@
 # Tic-tac-toe
+import random
 class square:
   def __init__(self, x, y):
     self.x=x
     self.y=y
     self.shape='-'
-    if x==1 and y==1:
-      self.position='center'
-    elif (x==1 and y!=1) or (x!=1 and y==1):
-      self.position='edge'
-    else:
-      self.position='corner'
+    self.occupied=False
 sq1=square(0,0)
 sq2=square(1,0)
 sq3=square(2,0)
@@ -19,11 +15,131 @@ sq6=square(2,1)
 sq7=square(0,2)
 sq8=square(1,2)
 sq9=square(2,2)
+sqList=[sq5, sq1, sq3, sq7, sq9, sq2, sq4, sq6, sq8]
 board=[[sq1, sq2, sq3],[sq4, sq5, sq6],[sq7, sq8, sq9]]
+win_possibilities=[[sq1, sq2, sq3],[sq4, sq5, sq6],[sq7, sq8, sq9],[sq1, sq4, sq7],[sq2, sq5, sq8],[sq3, sq6, sq9],[sq1, sq5, sq9],[]]
 def print_board():
   for i in board:
     print(f"{i[0].shape}|{i[1].shape}|{i[2].shape}")
     print("-----")
+def check_win(multiplayer, p1_shape):
+  for i in win_possibilities:
+    if i[0]==i[1] and i[1]==i[2]:
+      if i[0].shape==p1_shape:
+        if multiplayer=='y':
+          print("Player 1 wins!")
+        else:
+          print("You win!")
+      else:
+        if multiplayer=='y':
+          print("Player 2 wins!")
+        else:
+          print("Bot wins!")
+      return True
+  return False
+def occupy(square, shape):
+  square.shape=shape
+  square.occupied=True
+def input2square(input):
+  if input=='1':
+    move_sq=sq1
+  elif input=='2':
+    move_sq=sq2
+  elif input=='3':
+    move_sq=sq3
+  elif input=='4':
+    move_sq=sq4
+  elif input=='5':
+    move_sq=sq5
+  elif input=='6':
+    move_sq=sq6
+  elif input=='7':
+    move_sq=sq7
+  elif input=='8':
+    move_sq=sq8
+  elif input=='9':
+    move_sq=sq9
+  return move_sq
+def update_sqList():
+  global sqList
+  sqList[0]=sq5
+  sqList[1]=sq1
+  sqList[2]=sq3
+  sqList[3]=sq7
+  sqList[4]=sq9
+  sqList[5]=sq2
+  sqList[6]=sq4
+  sqList[7]=sq6
+  sqList[8]=sq8
+def update_square(move_sq):
+  global sq1, sq2, sq3, sq4, sq5, sq6, sq7, sq8, sq9
+  if move_sq.x==0:
+    if move_sq.y==0:
+      sq1=move_sq
+    elif move_sq.y==1:
+      sq4=move_sq
+    else:
+      sq7=move_sq
+  elif move_sq.x==1:
+    if move_sq.y==0:
+      sq2=move_sq
+    elif move_sq.y==1:
+      sq5=move_sq
+    else:
+      sq8=move_sq
+  else:
+    if move_sq.y==0:
+      sq3=move_sq
+    elif move_sq.y==1:
+      sq6=move_sq
+    else:
+      sq9=move_sq
+  update_sqList()
+def random_move(bot_shape):
+  rand_sqs=sqList
+  for i in len(rand_sqs):
+    sq=rand_sqs[random.randint(0, len(rand_sqs)-1)]
+    rand_sqs.remove(sq)
+    if not sq.occupied:
+      occupy(sq, bot_shape)
+      return
+def claim_win()
+def find_good_square(bot_shape):
+  for sq in sqList:
+    if not sq.occupied:
+      occupy(sq, bot_shape)
+def game():
+  global sq1, sq2, sq3, sq4, sq5, sq6, sq7, sq8, sq9
+  player_shape=input("Do you want to play as 'X' or 'O'? ")
+  two_p=input("""Are you playing a two-player game?('y')
+  Otherwise, you will play a bot.""")
+  if player_shape=='X' or player_shape=='x':
+    player_shape='X'
+    otherP_shape='O'
+  else:
+    player_shape='O'
+    otherP_shape='X'
+  if two_p!='y':
+    bot_lvl=input("""Select the level of the bot (1/2/3/4/5):
+    1. Dummy.1: Just chooses random squares. SUPER EASY.
+    2. Dummy.2: Tries to choose squares that are considered 'better'(centers or corners). SUPER EASY.
+    3. Logical: Chooses moves that make sense, but can fall for traps. MEDIUM.
+    4. Defensive: Won't let you win. HARD.
+    5. Boss: Will beat you up if you make the slightest mistake. IMPOSSIBLE.\n""")
+    while bot_lvl not in ['1', '2', '3', '4', '5']:
+      bot_lvl=input("Please enter a valid level number (1/2/3/4/5):\n")
+  move_num=1
+  while check_win()==False:
+    print("Current board:")
+    print_board()
+    if move_num%2==1:
+      p_move=input("Enter the square number for your move: ")
+      move_sq=input2square(p_move)
+      while move_sq not in sqList or move_sq.occupied==True:
+        p_move=input("Please enter a valid square number: ")
+        move_sq=input2square(p_move)
+      occupy(move_sq, player_shape)
+      update_square(move_sq)
 print("""1|2|3
 -----
 4|5|6
@@ -32,11 +148,3 @@ print("""1|2|3
 print("""Instructions:
 Enter the corresponding number on the board above
 to place your piece on that square.""")
-player_shape=input("Do you want to play as 'X' or 'O'? ")
-if player_shape=='X' or player_shape=='x':
-  player_shape='X'
-  bot_shape='O'
-else:
-  player_shape='O'
-  bot_shape='X'
-print_board()
