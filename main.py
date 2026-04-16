@@ -24,7 +24,7 @@ def print_board():
     print("-----")
 def check_win(multiplayer, p1_shape):
   for i in win_possibilities:
-    if i[0]==i[1] and i[1]==i[2]:
+    if i[0].shape==i[1].shape and i[1].shape==i[2].shape:
       if i[0].shape==p1_shape:
         if multiplayer=='y':
           print("Player 1 wins!")
@@ -37,6 +37,13 @@ def check_win(multiplayer, p1_shape):
           print("Bot wins!")
       return True
   return False
+def check_tie():
+  for sq in sqList:
+    if not sq.occupied:
+      return False
+  if check_win
+  print("It's a tie!")
+  return True
 def occupy(square, shape):
   square.shape=shape
   square.occupied=True
@@ -129,7 +136,7 @@ def game():
     while bot_lvl not in ['1', '2', '3', '4', '5']:
       bot_lvl=input("Please enter a valid level number (1/2/3/4/5):\n")
   move_num=1
-  while check_win()==False:
+  while check_win(two_p, player_shape)==False:
     print("Current board:")
     print_board()
     if move_num%2==1:
