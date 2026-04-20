@@ -1,4 +1,11 @@
-# Tic-tac-toe
+"""
+ ___ ____ __
+|_ _|_ _/ __|
+ | | | | (__
+ |_||___\___|
+
+"""
+#FIVE DIFFERENT BOTS AND TWO-PLAYER MODE!
 import random
 class square:
   def __init__(self, x, y):
@@ -17,7 +24,8 @@ sq8=square(1,2)
 sq9=square(2,2)
 sqList=[sq5, sq1, sq3, sq7, sq9, sq2, sq4, sq6, sq8]
 board=[[sq1, sq2, sq3],[sq4, sq5, sq6],[sq7, sq8, sq9]]
-win_possibilities=[[sq1, sq2, sq3],[sq4, sq5, sq6],[sq7, sq8, sq9],[sq1, sq4, sq7],[sq2, sq5, sq8],[sq3, sq6, sq9],[sq1, sq5, sq9],[]]
+win_possibilities=[[sq1, sq2, sq3],[sq4, sq5, sq6],[sq7, sq8, sq9],[sq1, sq4, sq7],[sq2, sq5, sq8],[sq3, sq6, sq9],[sq1, sq5, sq9],[sq3, sq5, sq7]]
+#fundamental functions to print board, occupy square, map player input to square, etc.
 def print_board():
   for i in board:
     print(f"{i[0].shape}|{i[1].shape}|{i[2].shape}")
@@ -41,9 +49,9 @@ def check_tie():
   for sq in sqList:
     if not sq.occupied:
       return False
-  if check_win
-  print("It's a tie!")
-  return True
+  if not check_win():
+    print("It's a tie!")
+    return True
 def occupy(square, shape):
   square.shape=shape
   square.occupied=True
@@ -66,6 +74,8 @@ def input2square(input):
     move_sq=sq8
   elif input=='9':
     move_sq=sq9
+  else:
+    move_sq=""
   return move_sq
 def update_sqList():
   global sqList
@@ -102,6 +112,7 @@ def update_square(move_sq):
     else:
       sq9=move_sq
   update_sqList()
+#functions for different bot strats
 def random_move(bot_shape):
   rand_sqs=sqList
   for i in len(rand_sqs):
@@ -110,11 +121,14 @@ def random_move(bot_shape):
     if not sq.occupied:
       occupy(sq, bot_shape)
       return
-def claim_win()
+def claim_win(bot_shape):
+  for i in win_possibilities:
+    cond_1=(i[0].shape==i[1].shape and i[0].shape==bot_shape)
 def find_good_square(bot_shape):
   for sq in sqList:
     if not sq.occupied:
       occupy(sq, bot_shape)
+#This is the game
 def game():
   global sq1, sq2, sq3, sq4, sq5, sq6, sq7, sq8, sq9
   player_shape=input("Do you want to play as 'X' or 'O'? ")
@@ -136,15 +150,21 @@ def game():
     while bot_lvl not in ['1', '2', '3', '4', '5']:
       bot_lvl=input("Please enter a valid level number (1/2/3/4/5):\n")
   move_num=1
-  while check_win(two_p, player_shape)==False:
+  while not check_win(two_p, player_shape):
     print("Current board:")
     print_board()
     if move_num%2==1:
-      p_move=input("Enter the square number for your move: ")
+      p_move=input("Player 1: enter the square number for your move: ")
       move_sq=input2square(p_move)
-      while move_sq not in sqList or move_sq.occupied==True:
+      while move_sq not in sqList:
         p_move=input("Please enter a valid square number: ")
         move_sq=input2square(p_move)
+      while move_sq.occupied:
+        p_move=input("That square is occupied. Try another square.")
+        move_sq=input2square(p_move)
+        while move_sq not in sqList:
+          p_move=input("Please enter a valid square number: ")
+          move_sq=input2square(p_move)
       occupy(move_sq, player_shape)
       update_square(move_sq)
 print("""1|2|3
