@@ -3,7 +3,14 @@
 |_ _|_ _/ __|
  | | | | (__
  |_||___\___|
-
+ ___  _    __
+|_ _|/_\ / __|
+ | |/ _ \ (__
+ |_/_/  \_\___|
+ ___ ___ ___
+|_ _| _ | __|
+ | |||_|| _|
+ |_||___|___|
 """
 #FIVE DIFFERENT BOTS AND TWO-PLAYER MODE!
 import random
@@ -121,14 +128,31 @@ def random_move(bot_shape):
     if not sq.occupied:
       occupy(sq, bot_shape)
       return
-def claim_win(bot_shape):
-  for i in win_possibilities:
-    cond_1=(i[0].shape==i[1].shape and i[0].shape==bot_shape)
 def find_good_square(bot_shape):
   for sq in sqList:
     if not sq.occupied:
       occupy(sq, bot_shape)
+def find_threat(p_shape):
+  for i in win_possibilites:
+    cond_1=(i[0].shape==i[1].shape and i[0]==p_shape)
+def claim_win(bot_shape):
+  for i in win_possibilities:
+    cond_1=(i[0].shape==i[1].shape and i[0].shape==bot_shape)
 #This is the game
+def player_move(p_shape):
+  p_move=input("Player 1: enter the square number for your move: ")
+  move_sq=input2square(p_move)
+  while move_sq not in sqList:
+    p_move=input("Please enter a valid square number: ")
+    move_sq=input2square(p_move)
+  while move_sq.occupied:
+    p_move=input("That square is occupied. Try another square.")
+    move_sq=input2square(p_move)
+    while move_sq not in sqList:
+      p_move=input("Please enter a valid square number: ")
+      move_sq=input2square(p_move)
+  occupy(move_sq, p_shape)
+  update_square(move_sq)
 def game():
   global sq1, sq2, sq3, sq4, sq5, sq6, sq7, sq8, sq9
   player_shape=input("Do you want to play as 'X' or 'O'? ")
@@ -154,19 +178,19 @@ def game():
     print("Current board:")
     print_board()
     if move_num%2==1:
-      p_move=input("Player 1: enter the square number for your move: ")
-      move_sq=input2square(p_move)
-      while move_sq not in sqList:
-        p_move=input("Please enter a valid square number: ")
-        move_sq=input2square(p_move)
-      while move_sq.occupied:
-        p_move=input("That square is occupied. Try another square.")
-        move_sq=input2square(p_move)
-        while move_sq not in sqList:
-          p_move=input("Please enter a valid square number: ")
-          move_sq=input2square(p_move)
-      occupy(move_sq, player_shape)
-      update_square(move_sq)
+      print("Player 1:")
+      player_move(player_shape)
+    else:
+      if two_p=='y':
+        print("Player 2:")
+        player_move(otherP_shape)
+      else:
+        if bot_lvl='1':
+          random_move(otherP_shape)
+        elif bot_lvl='2':
+          find_good_square(otherP_shape)
+        elif bot_lvl='3':
+          
 print("""1|2|3
 -----
 4|5|6
