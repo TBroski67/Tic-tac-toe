@@ -39,7 +39,7 @@ def print_board():
     print("-----")
 def check_win(multiplayer, p1_shape):
   for i in win_possibilities:
-    if i[0].shape==i[1].shape and i[1].shape==i[2].shape:
+    if i[0].shape==i[1].shape and i[1].shape==i[2].shape and i[0].occupied:
       if i[0].shape==p1_shape:
         if multiplayer=='y':
           print("Player 1 wins!")
@@ -122,7 +122,7 @@ def update_square(move_sq):
 #functions for different bot strats
 def random_move(bot_shape):
   rand_sqs=sqList
-  for i in len(rand_sqs):
+  for i in range(len(rand_sqs)):
     sq=rand_sqs[random.randint(0, len(rand_sqs)-1)]
     rand_sqs.remove(sq)
     if not sq.occupied:
@@ -133,14 +133,14 @@ def find_good_square(bot_shape):
     if not sq.occupied:
       occupy(sq, bot_shape)
 def find_threat(p_shape):
-  for i in win_possibilites:
+  for i in win_possibilities:
     cond_1=(i[0].shape==i[1].shape and i[0]==p_shape)
 def claim_win(bot_shape):
   for i in win_possibilities:
     cond_1=(i[0].shape==i[1].shape and i[0].shape==bot_shape)
 #This is the game
 def player_move(p_shape):
-  p_move=input("Player 1: enter the square number for your move: ")
+  p_move=input("Enter the square number for your move: ")
   move_sq=input2square(p_move)
   while move_sq not in sqList:
     p_move=input("Please enter a valid square number: ")
@@ -185,12 +185,13 @@ def game():
         print("Player 2:")
         player_move(otherP_shape)
       else:
-        if bot_lvl='1':
+        if bot_lvl=='1':
           random_move(otherP_shape)
-        elif bot_lvl='2':
+        elif bot_lvl=='2':
           find_good_square(otherP_shape)
-        elif bot_lvl='3':
-          
+        elif bot_lvl=='3':
+          find_good_square(otherP_shape)
+    move_num+=1
 print("""1|2|3
 -----
 4|5|6
@@ -199,3 +200,4 @@ print("""1|2|3
 print("""Instructions:
 Enter the corresponding number on the board above
 to place your piece on that square.""")
+game()
