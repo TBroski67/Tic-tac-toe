@@ -96,9 +96,9 @@ def claim_win(bot_shape):
   return False
 def find_threat(p_shape, bot_shape):
   for i in win_possibilities:
-    cond_1=(i[0].shape==i[1].shape and i[0].shape==p_shape)
-    cond_2=(i[0].shape==i[2].shape and i[0].shape==p_shape)
-    cond_3=(i[1].shape==i[2].shape and i[1].shape==p_shape)
+    cond_1=(i[0].shape==i[1].shape and i[0].shape==p_shape and not i[2].occupied)
+    cond_2=(i[0].shape==i[2].shape and i[0].shape==p_shape and not i[1].occupied)
+    cond_3=(i[1].shape==i[2].shape and i[1].shape==p_shape and not i[0].occupied)
     if cond_1:
       occupy(i[2], bot_shape)
       return True
