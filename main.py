@@ -62,63 +62,9 @@ def check_tie(two_p, p1_shape):
 def occupy(square, shape):
   square.shape=shape
   square.occupied=True
-def input2square(input):
-  if input=='1':
-    move_sq=sq1
-  elif input=='2':
-    move_sq=sq2
-  elif input=='3':
-    move_sq=sq3
-  elif input=='4':
-    move_sq=sq4
-  elif input=='5':
-    move_sq=sq5
-  elif input=='6':
-    move_sq=sq6
-  elif input=='7':
-    move_sq=sq7
-  elif input=='8':
-    move_sq=sq8
-  elif input=='9':
-    move_sq=sq9
-  else:
-    move_sq=""
-  return move_sq
-def update_sqList():
-  global sqList
-  sqList[0]=sq5
-  sqList[1]=sq1
-  sqList[2]=sq3
-  sqList[3]=sq7
-  sqList[4]=sq9
-  sqList[5]=sq2
-  sqList[6]=sq4
-  sqList[7]=sq6
-  sqList[8]=sq8
-def update_square(move_sq):
-  global sq1, sq2, sq3, sq4, sq5, sq6, sq7, sq8, sq9
-  if move_sq.x==0:
-    if move_sq.y==0:
-      sq1=move_sq
-    elif move_sq.y==1:
-      sq4=move_sq
-    else:
-      sq7=move_sq
-  elif move_sq.x==1:
-    if move_sq.y==0:
-      sq2=move_sq
-    elif move_sq.y==1:
-      sq5=move_sq
-    else:
-      sq8=move_sq
-  else:
-    if move_sq.y==0:
-      sq3=move_sq
-    elif move_sq.y==1:
-      sq6=move_sq
-    else:
-      sq9=move_sq
-  update_sqList()
+def input2square(user_input):
+    mapping = {'1': sq1, '2': sq2, '3': sq3, '4': sq4, '5': sq5, '6': sq6, '7': sq7, '8': sq8, '9': sq9}
+    return mapping.get(user_input, "")
 #functions for different bot strats
 def random_move(bot_shape):
   rand_sqs=[sq1, sq2, sq3, sq4, sq5, sq6, sq7, sq8, sq9]
@@ -135,9 +81,9 @@ def find_good_square(bot_shape):
       return
 def claim_win(bot_shape):
   for i in win_possibilities:
-    cond_1=(i[0].shape==i[1].shape and i[0].shape==bot_shape)
-    cond_2=(i[0].shape==i[2].shape and i[0].shape==bot_shape)
-    cond_3=(i[1].shape==i[2].shape and i[1].shape==bot_shape)
+    cond_1=(i[0].shape==i[1].shape and i[0].shape==bot_shape and not i[2].occupied)
+    cond_2=(i[0].shape==i[2].shape and i[0].shape==bot_shape and not i[1].occupied)
+    cond_3=(i[1].shape==i[2].shape and i[1].shape==bot_shape and not i[0].occupied)
     if cond_1:
       occupy(i[2], bot_shape)
       return True
