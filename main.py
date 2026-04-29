@@ -52,11 +52,11 @@ def check_win(multiplayer, p1_shape):
           print("Bot wins!")
       return True
   return False
-def check_tie():
+def check_tie(two_p, p1_shape):
   for sq in sqList:
     if not sq.occupied:
       return False
-  if not check_win():
+  if not check_win(two_p, p1_shape):
     print("It's a tie!")
     return True
 def occupy(square, shape):
@@ -121,7 +121,7 @@ def update_square(move_sq):
   update_sqList()
 #functions for different bot strats
 def random_move(bot_shape):
-  rand_sqs=sqList
+  rand_sqs=[sq1, sq2, sq3, sq4, sq5, sq6, sq7, sq8, sq9]
   for i in range(len(rand_sqs)):
     sq=rand_sqs[random.randint(0, len(rand_sqs)-1)]
     rand_sqs.remove(sq)
@@ -132,12 +132,37 @@ def find_good_square(bot_shape):
   for sq in sqList:
     if not sq.occupied:
       occupy(sq, bot_shape)
-def find_threat(p_shape):
-  for i in win_possibilities:
-    cond_1=(i[0].shape==i[1].shape and i[0]==p_shape)
+      return
 def claim_win(bot_shape):
   for i in win_possibilities:
     cond_1=(i[0].shape==i[1].shape and i[0].shape==bot_shape)
+    cond_2=(i[0].shape==i[2].shape and i[0].shape==bot_shape)
+    cond_3=(i[1].shape==i[2].shape and i[1].shape==bot_shape)
+    if cond_1:
+      occupy(i[2], bot_shape)
+      return True
+    elif cond_2:
+      occupy(i[1], bot_shape)
+      return True
+    elif cond_3:
+      occupy(i[0], bot_shape)
+      return True
+  return False
+def find_threat(p_shape, bot_shape):
+  for i in win_possibilities:
+    cond_1=(i[0].shape==i[1].shape and i[0].shape==p_shape)
+    cond_2=(i[0].shape==i[2].shape and i[0].shape==p_shape)
+    cond_3=(i[1].shape==i[2].shape and i[1].shape==p_shape)
+    if cond_1:
+      occupy(i[2], bot_shape)
+      return True
+    elif cond_2:
+      occupy(i[1], bot_shape)
+      return True
+    elif cond_3:
+      occupy(i[0], bot_shape)
+      return True
+  return False
 #This is the game
 def player_move(p_shape):
   p_move=input("Enter the square number for your move: ")
@@ -174,7 +199,7 @@ def game():
     while bot_lvl not in ['1', '2', '3', '4', '5']:
       bot_lvl=input("Please enter a valid level number (1/2/3/4/5):\n")
   move_num=1
-  while not check_win(two_p, player_shape):
+  while not (check_win(two_p, player_shape) or check_tie(two_p, player_shape)):
     print("Current board:")
     print_board()
     if move_num%2==1:
@@ -190,7 +215,9 @@ def game():
         elif bot_lvl=='2':
           find_good_square(otherP_shape)
         elif bot_lvl=='3':
-          find_good_square(otherP_shape)
+          if not claim_win(otherP_shape):
+            if not find_threat(player_shape, otherP_shape):
+              find_good_square(otherP_shape)
     move_num+=1
 print("""1|2|3
 -----
