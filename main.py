@@ -123,7 +123,6 @@ def player_move(p_shape):
       p_move=input("Please enter a valid square number: ")
       move_sq=input2square(p_move)
   occupy(move_sq, p_shape)
-  update_square(move_sq)
 def game():
   global sq1, sq2, sq3, sq4, sq5, sq6, sq7, sq8, sq9
   player_shape=input("Do you want to play as 'X' or 'O'? ")
