@@ -109,6 +109,13 @@ def find_threat(p_shape, bot_shape):
       occupy(i[0], bot_shape)
       return True
   return False
+def avoid_trap(move, p_shape, bot_shape):
+  if move==4:
+    #add traps and for loop to find traps
+    trap_possibilities=[(sq1.shape==p_shape and sq5.shape==bot_shape and sq9.shape==p_shape),(sq3.shape==p_shape and sq5.shape==bot_shape and sq7.shape==p_shape),(),(),(),()]
+    return True
+  else:
+    return False
 #This is the game
 def player_move(p_shape):
   p_move=input("Enter the square number for your move: ")
@@ -163,6 +170,11 @@ def game():
           if not claim_win(otherP_shape):
             if not find_threat(player_shape, otherP_shape):
               find_good_square(otherP_shape)
+        elif bot_lvl=='4':
+          if not claim_win(otherP_shape):
+            if not find_threat(player_shape, otherP_shape):
+              if not avoid_trap(move_num, player_shape, otherP_shape):
+                find_good_square(otherP_shape)
     move_num+=1
 print("""1|2|3
 -----
