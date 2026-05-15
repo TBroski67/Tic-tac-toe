@@ -111,11 +111,34 @@ def find_threat(p_shape, bot_shape):
   return False
 def avoid_trap(move, p_shape, bot_shape):
   if move==4:
-    #add traps and for loop to find traps
-    trap_possibilities=[(sq1.shape==p_shape and sq5.shape==bot_shape and sq9.shape==p_shape),(sq3.shape==p_shape and sq5.shape==bot_shape and sq7.shape==p_shape),(),(),(),()]
-    return True
-  else:
-    return False
+    #add traps and for loops to find traps
+    #numbers for list correspond for one of the best squares to play
+    traps1=[(sq2.occupied and sq4.occupied),(sq2.occupied and sq7.occupied),(sq3.occupied and sq4.occupied)]
+    traps2=[(sq1.occupied and sq9.occupied),(sq3.occupied and sq7.occupied)]
+    traps3=[(sq1.occupied and sq6.occupied),(sq2.occupied and sq6.occupied),(sq2.occupied and sq9.occupied)]
+    traps7=[(sq1.occupied and sq8.occupied),(sq4.occupied and sq8.occupied),(sq4.occupied and sq9.occupied)]
+    traps9=[(sq3.occupied and sq8.occupied),(sq6.occupied and sq7.occupied),(sq6.occupied and sq8.occupied)]
+    for pos in traps1:
+      if pos:
+        occupy(sq1, bot_shape)
+        return True
+    for pos in traps2:
+      if pos:
+        occupy(sq2, bot_shape)
+        return True
+    for pos in traps3:
+      if pos:
+        occupy(sq3, bot_shape)
+        return True
+    for pos in traps7:
+      if pos:
+        occupy(sq7, bot_shape)
+        return True
+    for pos in traps9:
+      if pos:
+        occupy(sq9, bot_shape)
+        return True
+  return False
 #This is the game
 def player_move(p_shape):
   p_move=input("Enter the square number for your move: ")
@@ -151,9 +174,9 @@ def game():
     while bot_lvl not in ['1', '2', '3', '4', '5']:
       bot_lvl=input("Please enter a valid level number (1/2/3/4/5):\n")
   move_num=1
+  print("Current board:")
+  print_board()
   while not (check_win(two_p, player_shape) or check_tie(two_p, player_shape)):
-    print("Current board:")
-    print_board()
     if move_num%2==1:
       print("Player 1:")
       player_move(player_shape)
@@ -173,8 +196,10 @@ def game():
         elif bot_lvl=='4':
           if not claim_win(otherP_shape):
             if not find_threat(player_shape, otherP_shape):
-              if not avoid_trap(move_num, player_shape, otherP_shape):
+              if not(avoid_trap(move_num, player_shape, otherP_shape)):
                 find_good_square(otherP_shape)
+    print("Current board:")
+    print_board()
     move_num+=1
 print("""1|2|3
 -----
